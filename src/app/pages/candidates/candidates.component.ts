@@ -34,8 +34,6 @@ export class CandidatesComponent implements OnInit {
 
     this.candidatesService.getCandidates(filterData).subscribe({
       next: (resolve: Candidate[]) => {
-        // eslint-disable-next-line no-console
-        console.log(resolve);
         this.candidatesList = resolve;
         this.pageState.finishLoading();
       },

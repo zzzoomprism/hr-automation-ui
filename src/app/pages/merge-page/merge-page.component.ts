@@ -51,7 +51,7 @@ export class MergePageComponent implements OnInit, OnDestroy {
   }
 
   finalResult(): MergeCandidate {
-    const result = this.candidates.reduce((res, candidate) => {
+    return this.candidates.reduce((res, candidate) => {
       res.id = 'Results';
       res.attributes = (res.attributes || []).concat(
         candidate.attributes.filter((a) => a.selected)
@@ -66,10 +66,6 @@ export class MergePageComponent implements OnInit, OnDestroy {
       );
       return res;
     }, {} as MergeCandidate);
-
-    // eslint-disable-next-line no-console
-    console.log(result);
-    return result;
   }
 
   deleteCandidate(candidate: MergeCandidate) {
