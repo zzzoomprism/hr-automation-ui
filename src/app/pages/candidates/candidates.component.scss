@@ -4,8 +4,12 @@
     position: sticky;
     top: 0;
     background-color: $background;
-    height: 90px;
     width: 100%;
     z-index: 1000;
+}
+
+.container {
+    padding-top: 10px;
+    padding-bottom: 0;
 }
 

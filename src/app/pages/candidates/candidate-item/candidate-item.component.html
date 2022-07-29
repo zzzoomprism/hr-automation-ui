@@ -1,15 +1,10 @@
 <mat-card>
   <mat-card-title>
     <div class="flex flex-between">
-      <span
-        matBadge="0"
-        matBadgePosition="after"
-        matBadgeSize="small"
-        [matBadgeColor]="candidate?.status | status"
-        class="hide-text"
-        >{{ candidate?.fullName | titlecase }}</span
-      >
-      <span class="mat-body-2 text-grey">{{ candidate?.lastContact | date }}</span>
+      <span>{{ candidate?.fullName | titlecase }}</span>
+      <button mat-raised-button color="primary" class="mr-10" (click)="openEditModal()">
+        <mat-icon>edit</mat-icon>
+      </button>
     </div>
   </mat-card-title>
   <mat-card-subtitle>{{ candidate?.id }}</mat-card-subtitle>
