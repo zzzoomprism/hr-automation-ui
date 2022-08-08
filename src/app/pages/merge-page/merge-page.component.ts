@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { map, Observable, Subject, takeUntil } from 'rxjs';
+import { catchError, filter, finalize, map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import * as _ from 'lodash';
 import { MergeService } from '@pages/merge-page/merge.service';
 import { PageState } from '@src/app/utils/pageState';
 import { MergeCandidate } from '@pages/merge-page/view-model/MergeCandidate';
 import { MergeCandidateAttribute } from '@pages/merge-page/view-model/MergeCandidateAttribute';
 import { CandidateAttributeType } from '@src/app/models/candidateAttributeType';
+import { ICONS_NAME } from '@pages/merge-page/view-model/icons-names';
 import { MergeCandidates } from './mergeCandidate';
 
 @Component({
@@ -14,7 +15,7 @@ import { MergeCandidates } from './mergeCandidate';
   styleUrls: ['./merge-page.component.scss'],
 })
 export class MergePageComponent implements OnInit, OnDestroy {
-  public pageState = new PageState();
+  public pageState: PageState = new PageState();
 
   public candidatesMatrix!: Observable<MergeCandidates>;
 
@@ -24,59 +25,56 @@ export class MergePageComponent implements OnInit, OnDestroy {
 
   public candidatesMatrixNotEmpty!: boolean;
 
+  public readonly iconsNames: { [key: string]: string } = ICONS_NAME;
+
   private unSubscribe$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(public mergeService: MergeService) {
+  constructor(private mergeService: MergeService) {
     this.candidatesMatrix = this.mergeService
       .getCandidates()
       .pipe(map((candidates) => new MergeCandidates(candidates)));
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.pageState.startLoading();
-    this.candidatesMatrix.pipe(takeUntil(this.unSubscribe$)).subscribe({
-      next: (matrix: MergeCandidates) => {
-        if (matrix) {
-          this.pageState.finishLoading();
-        }
-        this.candidatesMatrixNotEmpty = !matrix.isEmpty();
-        this.candidates = matrix.getCandidates();
-        this.attributeTypes = matrix.getAllAttributeTypesFrom();
-      },
-      error: (error: any) => {
-        this.pageState.catchError(error);
-        this.pageState.finishLoading();
-      },
-    });
+    this.candidatesMatrix
+      .pipe(
+        takeUntil(this.unSubscribe$),
+        filter((matrix: MergeCandidates) => !!matrix),
+        tap((matrix: MergeCandidates) => {
+          this.candidatesMatrixNotEmpty = !matrix.isEmpty();
+          this.candidates = matrix.getCandidates();
+          this.attributeTypes = matrix.getAllAttributeTypesFrom();
+        }),
+        finalize(() => this.pageState.finishLoading()),
+        catchError(async (error) => this.pageState.catchError(error))
+      )
+      .subscribe();
   }
 
-  finalResult(): MergeCandidate {
-    const result = this.candidates.reduce((res, candidate) => {
+  public finalResult(): MergeCandidate {
+    return this.candidates.reduce((res: MergeCandidate, candidate: MergeCandidate) => {
       res.id = 'Results';
       res.attributes = (res.attributes || []).concat(
-        candidate.attributes.filter((a) => a.selected)
+        candidate.attributes.filter((attr: MergeCandidateAttribute) => attr.selected)
       );
       res.attributesMap = new Map<string, MergeCandidateAttribute[]>(
         Object.entries(
           _.chain(res.attributes)
-            .groupBy((attr) => attr.attributeTypes.name)
-            .mapValues((item) => _.uniqBy(item, 'value'))
+            .groupBy((attr: MergeCandidateAttribute) => attr.attributeTypes.name)
+            .mapValues((item: MergeCandidateAttribute[]) => _.uniqBy(item, 'value'))
             .value()
         )
       );
       return res;
     }, {} as MergeCandidate);
-
-    // eslint-disable-next-line no-console
-    console.log(result);
-    return result;
   }
 
-  deleteCandidate(candidate: MergeCandidate) {
+  public deleteCandidate(candidate: MergeCandidate) {
     this.mergeService.deleteCandidate(candidate);
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.unSubscribe$.next(true);
     this.unSubscribe$.complete();
   }

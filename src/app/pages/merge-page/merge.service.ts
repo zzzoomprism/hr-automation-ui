@@ -13,11 +13,7 @@ import { CandidateAttribute } from '@src/app/models/candidateAttribute';
   providedIn: 'root',
 })
 export class MergeService {
-  public candidatesIds$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([
-    'uliana_fomina',
-    'artem_skrebets',
-    'artem_skrebets',
-  ]);
+  public candidatesIds$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
   private readonly candidates$: Observable<MergeCandidate[]>;
 
@@ -27,39 +23,49 @@ export class MergeService {
   ) {
     this.candidates$ = this.candidatesIds$.pipe(
       distinctUntilChanged(),
-      mergeMap((candidatesIds) =>
-        forkJoin(candidatesIds.map((id) => this.candidateService.getCandidateById(id)))
+      mergeMap((candidatesIds: string[]) =>
+        forkJoin(candidatesIds.map((id: string) => this.candidateService.getCandidateById(id)))
       ),
-      map((candidates) => candidates.map((c) => this.candidateToMergeModel(c)))
+      map((candidates: Candidate[]) =>
+        candidates.map((candidate: Candidate) => this.candidateToMergeModel(candidate))
+      )
     );
   }
 
-  deleteCandidate(candidate: MergeCandidate) {
-    this.candidatesIds$.next(this.candidatesIds$.getValue().filter((id) => id !== candidate.id));
+  public deleteCandidate(candidate: MergeCandidate): void {
+    const filteredCandidatesIds: string[] = this.candidatesIds$
+      .getValue()
+      .filter((id: string) => id !== candidate.id);
+    this.candidatesIds$.next(filteredCandidatesIds);
   }
 
-  mergeCandidates(): void {
+  public mergeCandidates(): void {
     this.notification.show('Successfully merged. Check console', NotificationMode.SUCCESS);
   }
 
-  getCandidates(): Observable<MergeCandidate[]> {
+  public getCandidates(): Observable<MergeCandidate[]> {
     return this.candidates$;
   }
 
-  candidateToMergeModel(candidate: Candidate): MergeCandidate {
-    const attributes = candidate.candidateAttributes.map((attr) =>
+  public candidateToMergeModel(candidate: Candidate): MergeCandidate {
+    const attributes = candidate.candidateAttributes.map((attr: CandidateAttribute) =>
       this.attributeToMergeModel(candidate.id, attr)
     );
     return {
       ...candidate,
       attributes,
       attributesMap: new Map<string, MergeCandidateAttribute[]>(
-        Object.entries(_.groupBy(attributes, (attr) => attr.attributeTypes.name))
+        Object.entries(
+          _.groupBy(attributes, (attr: MergeCandidateAttribute) => attr.attributeTypes.name)
+        )
       ),
     };
   }
 
-  attributeToMergeModel(candidateId: string, attr: CandidateAttribute): MergeCandidateAttribute {
+  public attributeToMergeModel(
+    candidateId: string,
+    attr: CandidateAttribute
+  ): MergeCandidateAttribute {
     return {
       ...attr,
       candidateId,

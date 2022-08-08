@@ -9,7 +9,7 @@
   >
     {{candidate.id}}
   </mat-checkbox>
-  <mat-icon color="warn" (click)="deleteClick()" class="remove-button">delete_forever</mat-icon>
+  <mat-icon color="warn" (click)="removeCandidate()" class="remove-button">delete_forever</mat-icon>
 </label>
 <label class="desc-candidate-title" *ngIf='!editable'>
   {{candidate.id}}

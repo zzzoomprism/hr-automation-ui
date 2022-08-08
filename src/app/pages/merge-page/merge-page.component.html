@@ -10,24 +10,15 @@
       <div class="desc-title"></div>
       <ng-container *ngFor="let attributeType of attributeTypes">
         <div class="desc-title">
-          <ng-container [ngSwitch]="attributeType.name">
-            <mat-icon [inline]="true" *ngSwitchCase="'email'">email</mat-icon>
-            <mat-icon [inline]="true" *ngSwitchCase="'facebookid'">facebook</mat-icon>
-            <mat-icon [inline]="true" *ngSwitchCase="'phone'">phone</mat-icon>
-            <mat-icon [inline]="true" *ngSwitchCase="'twitter'">chat</mat-icon>
-            <mat-icon [inline]="true" *ngSwitchCase="'firstname'">person</mat-icon>
-            <mat-icon [inline]="true" *ngSwitchCase="'lastname'">person</mat-icon>
-            <mat-icon [inline]="true" *ngSwitchDefault>info</mat-icon>
-          </ng-container>
-          <span>&nbsp;</span>        
+          <mat-icon [inline]="true">{{iconsNames[attributeType.name] || 'info'}}</mat-icon>
           {{attributeType.name}}
         </div>
       </ng-container>
-  </div>
+    </div>
 
     <div class="candidates-container gap-10">
       <ng-container *ngFor="let candidate of candidates">
-        <app-merge-candidate          
+        <app-merge-candidate
           [candidate]='candidate'
           [attributeTypes]='attributeTypes'
           (delete)='deleteCandidate(candidate)'

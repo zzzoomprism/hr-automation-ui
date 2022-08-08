@@ -1,4 +1,4 @@
-import { CandidateStatus } from '../constants/candidates';
+import { CandidateStatus } from '@constants/candidates';
 import { CandidateAttribute } from './candidateAttribute';
 import { CandidateAttributesValues } from './candidateAttributesValues';
 import { CommunicationHistory } from './communicationHistory';
@@ -18,6 +18,6 @@ export interface Candidate {
   keywords: Keywords[];
   communicationHistory: CommunicationHistory[];
   candidateAttributes: CandidateAttribute[];
-  CandidateAttributesValues: CandidateAttributesValues[];
+  candidateAttributesValues: CandidateAttributesValues[];
   mergeCandidates: any;
 }

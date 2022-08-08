@@ -13,36 +13,39 @@ import { CandidateAttributeType } from '@src/app/models/candidateAttributeType';
 export class MergeCandidateComponent {
   constructor(public mergeService: MergeService) {}
 
-  checked = false;
+  public checked: boolean = false;
 
-  @Input() editable: boolean = true;
+  @Input() public editable: boolean = true;
 
-  @Input() candidate!: MergeCandidate;
+  @Input() public candidate!: MergeCandidate;
 
-  @Input() attributeTypes!: CandidateAttributeType[] | null;
+  @Input() public attributeTypes!: CandidateAttributeType[] | null;
 
-  @Output() attributeSelectionChanged = new EventEmitter<MergeCandidateAttribute>();
+  @Output() public delete: EventEmitter<void> = new EventEmitter<void>();
 
-  @Output() delete = new EventEmitter<void>();
+  @Output() private attributeSelectionChanged: EventEmitter<MergeCandidateAttribute> =
+    new EventEmitter<MergeCandidateAttribute>();
 
-  selectCandidate(value: MatCheckboxChange) {
+  public selectCandidate(value: MatCheckboxChange): void {
     this.changeAttributeSelections(this.candidate.attributes, value.checked);
   }
 
-  changeAttributeSelections(attrs?: MergeCandidateAttribute[], selected?: boolean) {
+  public changeAttributeSelections(attrs?: MergeCandidateAttribute[], selected?: boolean): void {
     if (!this.editable || !attrs) {
       return;
     }
-    attrs.forEach((attr) => {
+    attrs.forEach((attr: MergeCandidateAttribute) => {
       // eslint-disable-next-line no-param-reassign
-      attr.selected = selected === undefined ? attr.selected : selected;
+      attr.selected = selected || attr.selected;
       this.attributeSelectionChanged.emit(attr);
     });
 
-    this.checked = this.candidate.attributes.every((attr) => attr.selected);
+    this.checked = this.candidate.attributes.every(
+      (attr: MergeCandidateAttribute) => attr.selected
+    );
   }
 
-  deleteClick() {
+  public removeCandidate(): void {
     this.delete.emit();
   }
 }

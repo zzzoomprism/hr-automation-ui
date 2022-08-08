@@ -7,5 +7,9 @@ import { MergeService } from '@pages/merge-page/merge.service';
   styleUrls: ['./actions-bar-merge.component.scss'],
 })
 export class ActionsBarMergeComponent {
-  constructor(public mergeService: MergeService) {}
+  constructor(private mergeService: MergeService) {}
+
+  public mergeCandidates(): void {
+    this.mergeService.mergeCandidates();
+  }
 }

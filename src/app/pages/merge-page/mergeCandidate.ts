@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { CandidateAttributeType } from '@src/app/models/candidateAttributeType';
+import { MergeCandidateAttribute } from '@pages/merge-page/view-model/MergeCandidateAttribute';
 import { MergeCandidate } from './view-model/MergeCandidate';
 
 export class MergeCandidates {
@@ -10,23 +11,26 @@ export class MergeCandidates {
   constructor(candidates: MergeCandidate[]) {
     this.candidates = candidates;
     this.allAttributeTypes = _(candidates)
-      .flatMap((c) => c.attributes.map((a) => a.attributeTypes))
+      .flatMap((candidate: MergeCandidate) =>
+        candidate.attributes.map((attr: MergeCandidateAttribute) => attr.attributeTypes)
+      )
       .uniqBy('id')
       .reduce(
-        (array: CandidateAttributeType[], a: CandidateAttributeType) => array.concat([a]),
+        (attrTypes: CandidateAttributeType[], attrType: CandidateAttributeType) =>
+          attrTypes.concat([attrType]),
         []
       );
   }
 
-  getAllAttributeTypesFrom(): CandidateAttributeType[] {
+  public getAllAttributeTypesFrom(): CandidateAttributeType[] {
     return this.allAttributeTypes;
   }
 
-  isEmpty(): boolean {
-    return this.candidates.length === 0;
+  public isEmpty(): boolean {
+    return !!this.candidates.length;
   }
 
-  getCandidates(): MergeCandidate[] {
+  public getCandidates(): MergeCandidate[] {
     return this.candidates;
   }
 }

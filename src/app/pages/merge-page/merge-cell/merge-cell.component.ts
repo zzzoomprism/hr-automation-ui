@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MergeService } from '@pages/merge-page/merge.service';
 import { MergeCandidateAttribute } from '@pages/merge-page/view-model/MergeCandidateAttribute';
 
 @Component({
@@ -8,15 +7,13 @@ import { MergeCandidateAttribute } from '@pages/merge-page/view-model/MergeCandi
   styleUrls: ['./merge-cell.component.scss'],
 })
 export class MergeCellComponent {
-  constructor(public mergeService: MergeService) {}
+  @Input() public value?: MergeCandidateAttribute[];
 
-  @Input() value?: MergeCandidateAttribute[];
+  @Input() public editable!: boolean;
 
-  @Input() editable!: boolean;
+  @Output() private valueChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  @Output() valueChange = new EventEmitter<boolean>();
-
-  onCheckboxChange(item: MergeCandidateAttribute) {
+  public onCheckboxChange(item: MergeCandidateAttribute): void {
     this.valueChange.emit(item.selected);
   }
 }

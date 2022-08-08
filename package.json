@@ -30,7 +30,7 @@
     "@angular/router": "~13.2.0",
     "@compodoc/compodoc": "^1.1.19",
     "lodash": "^4.17.21",
-    "rxjs": "~7.5.0",
+    "rxjs": "^7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
