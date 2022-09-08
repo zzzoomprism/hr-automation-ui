@@ -1,6 +1,6 @@
 import { MatButtonModule } from '@angular/material/button';
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -14,9 +14,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CandidateUpdatesComponent } from '@pages/candidate-detail/candidate-updates/candidate-updates.component';
 import { AppPipesModule } from '@utils/pipes/app-pipes.module';
-import AppRoutingModule from '@src/app/app-routing.module';
 import { EditCandidateModalComponent } from '@pages/candidate-detail/edit-candidate-modal/edit-candidate-modal.component';
 import { CandidateFormComponent } from '@pages/candidate-detail/candidate-form/candidate-form.component';
+import { CandidateDetailRoutingModule } from '@pages/candidate-detail/candidate-detail-routing.module';
 import { CandidateCommunicationsComponent } from './candidate-communications/candidate-communications.component';
 import { CandidateDetailComponent } from './candidate-detail.component';
 import { CandidateMainInfoComponent } from './candidate-main-info/candidate-main-info.component';
@@ -37,8 +37,7 @@ import { CommunicationCommentComponent } from './candidate-communications/commun
     CandidateFormComponent,
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
+    CommonModule,
     MatTableModule,
     MatIconModule,
     MatCardModule,
@@ -53,6 +52,7 @@ import { CommunicationCommentComponent } from './candidate-communications/commun
     FormsModule,
     MatRadioModule,
     MatProgressSpinnerModule,
+    CandidateDetailRoutingModule,
   ],
   exports: [
     CandidateCommunicationsComponent,

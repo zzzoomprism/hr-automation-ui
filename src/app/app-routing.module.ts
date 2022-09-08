@@ -1,11 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CandidatesComponent } from '@pages/candidates/candidates.component';
-import { CandidateDetailComponent } from '@pages/candidate-detail/candidate-detail.component';
-
 import { ROUTES } from './routes';
-import { MergePageComponent } from './pages/merge-page/merge-page.component';
 
 const routes: Routes = [
   {
@@ -15,15 +11,19 @@ const routes: Routes = [
   },
   {
     path: ROUTES.CANDIDATES,
-    component: CandidatesComponent,
+    loadChildren: () =>
+      import('./pages/candidates/candidate.module').then((m) => m.CandidateModule),
   },
   {
     path: ROUTES.CANDIDATE_DETAIL,
-    component: CandidateDetailComponent,
+    loadChildren: () =>
+      import('./pages/candidate-detail/candidate-detail.module').then(
+        (m) => m.CandidateDetailModule
+      ),
   },
   {
     path: ROUTES.CANDIDATES_MERGE,
-    component: MergePageComponent,
+    loadChildren: () => import('./pages/merge-page/merge.module').then((m) => m.MergeModule),
   },
 ];
 
