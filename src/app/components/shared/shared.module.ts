@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatInputModule } from '@angular/material/input';
@@ -13,8 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import AppRoutingModule from '@src/app/app-routing.module';
 
+import { CommonModule } from '@angular/common';
 import { ErrorDisplayComponent } from '@components/shared/error-display/error-display.component';
 import { NewCandidateModalComponent } from '@components/shared/new-candidate-modal/new-candidate-modal.component';
 import { SignInModalComponent } from '@components/shared/sign-in-modal/sign-in-modal.component';
@@ -28,8 +27,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     NavbarComponent,
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
 

@@ -1,5 +1,4 @@
 import { MatButtonModule } from '@angular/material/button';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
@@ -11,11 +10,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
+import { CommonModule } from '@angular/common';
 import { SharedModule } from '@components/shared/shared.module';
 import { AppPipesModule } from '@utils/pipes/app-pipes.module';
-import AppRoutingModule from '@src/app/app-routing.module';
 import { ActionsBarMergeComponent } from '@src/app/pages/merge-page/actions-bar-merge/actions-bar-merge.component';
 import { MergeCandidateComponent } from '@pages/merge-page/merge-candidate/merge-candidate.component';
+import { MergeRoutingModule } from '@pages/merge-page/merge-routing.module';
 import { MergeCellComponent } from './merge-cell/merge-cell.component';
 import { MergePageComponent } from './merge-page.component';
 
@@ -27,8 +27,6 @@ import { MergePageComponent } from './merge-page.component';
     ActionsBarMergeComponent,
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
     FormsModule,
 
     MatCheckboxModule,
@@ -42,6 +40,9 @@ import { MergePageComponent } from './merge-page.component';
 
     SharedModule,
     AppPipesModule,
+    CommonModule,
+
+    MergeRoutingModule,
   ],
   exports: [MergePageComponent],
 })
